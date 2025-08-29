@@ -23,10 +23,16 @@ def prepare_index():
     """
     Prepare the FAISS index with document embeddings.
     To be called on app startup once.
+    This function should be called once at application startup to:
+    - Generate embeddings for all sample documents synchronously.
+    - Store these embeddings in a global list.
+    - Convert the embeddings into a NumPy float32 array.
+    - Reset and populate the FAISS index with these vectors for efficient search.
     """
     global document_embeddings
     document_embeddings = []
 
+    # Generate embedding vector for each document synchronously
     for doc in documents:
         emb = embed_text_sync(doc)
         document_embeddings.append(emb)
@@ -34,5 +40,8 @@ def prepare_index():
     # Convert list to numpy array of float32 for FAISS
     xb = np.array(document_embeddings).astype('float32')
 
+    # Clear any existing entries in the FAISS index
     index.reset()
+    
+    # Add the new document embeddings to the FAISS index for similarity search
     index.add(xb)
