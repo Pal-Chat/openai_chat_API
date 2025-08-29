@@ -22,7 +22,7 @@ cd my_chat_app
 python -m venv venv
 source venv/bin/activate
 
-# On Windows use 
+On Windows use 
 venv\Scripts\activate
 
 4. Install dependencies:
